@@ -49,7 +49,8 @@ public class Regular extends User {
         for (int i = 0; i < cart.length - 1; i++) {
             int minIndex = i;
             for (int j = i + 1; j < cart.length; j++) {
-                if (cart[j] != null && cart[j].getPublishDate() != null && cart[j].getPublishDate().before(cart[minIndex].getPublishDate())) {
+                if (cart[j] != null && cart[j].getPublishDate() != null &&
+                    cart[j].getPublishDate().compareTo(cart[minIndex].getPublishDate()) < 0) {
                     minIndex = j;
                 }
             }

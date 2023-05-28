@@ -3,6 +3,8 @@ package model;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
+
 import javax.swing.event.SwingPropertyChangeSupport;
 import javax.swing.text.Position;
 
@@ -591,29 +593,52 @@ public class Controller {
 
 	public String readingSessionPremium(int userPosition, String productId, String option) {
 		String msg = "";
+		int cantAdvertise = 0;
 
-    if (users.get(userPosition) instanceof Premium) {
-        Premium premiumUser = (Premium) users.get(userPosition);
+		String[] advertise = {"¡Suscríbete al Combo Plus y llévate Disney+ y Star+ a un precio increíble!", "Ahora tus mascotas tienen una app favorita: Laika. Los mejores productos para tu peludito", "¡Estamos de aniversario! Visita tu Éxito más cercano y sorpréndete con las mejores ofertas."};
 
-        for (int i = 0; i < premiumUser.getpCart().size(); i++) {
-            if (premiumUser.getpCart().get(i) != null && premiumUser.getpCart().get(i).getId().equalsIgnoreCase(productId)) {
-                if (option.equalsIgnoreCase("a")) {
-                    premiumUser.getpCart().get(i).setPagRead(premiumUser.getpCart().get(i).getPagRead() - 1);
-                    products.get(i).setPagRead(products.get(i).getPagRead() + 1);
-                } else if (option.equalsIgnoreCase("s")) {
-                    premiumUser.getpCart().get(i).setPagRead(premiumUser.getpCart().get(i).getPagRead() + 1);
-                    products.get(i).setPagRead(products.get(i).getPagRead() + 1);
-                }
+		if (users.get(userPosition) instanceof Premium) {
+			Premium premiumUser = (Premium) users.get(userPosition);
 
-                msg += "\nSesión de lectura en proceso";
-                msg += "\nLeyendo: " + premiumUser.getpCart().get(i).getName();
-                msg += "\nLeyendo página " + premiumUser.getpCart().get(i).getPagRead() + " de " + premiumUser.getpCart().get(i).getPagesNum();
-                break;
-            }
-        }
-    } else {
-        msg = "Error: The user is not a premium user";
-    }
+			for (int i = 0; i < premiumUser.getpCart().size(); i++) {
+				if (premiumUser.getpCart().get(i) != null && premiumUser.getpCart().get(i).getId().equalsIgnoreCase(productId)) {
+					if (option.equalsIgnoreCase("a")) {
+						premiumUser.getpCart().get(i).setPagRead(premiumUser.getpCart().get(i).getPagRead() - 1);
+						products.get(i).setPagRead(products.get(i).getPagRead() + 1);
+						cantAdvertise +=1;
+						if(cantAdvertise == 20){
+							cantAdvertise = 0;
+							Random random = new Random();
+							int indice = random.nextInt(3);
+							String advert = advertise[indice];
+
+							msg += advert;
+							
+						}
+					} else if (option.equalsIgnoreCase("s")) {
+						premiumUser.getpCart().get(i).setPagRead(premiumUser.getpCart().get(i).getPagRead() + 1);
+						products.get(i).setPagRead(products.get(i).getPagRead() + 1);
+
+						if(cantAdvertise == 20){
+							cantAdvertise = 0;
+							Random random = new Random();
+							int indice = random.nextInt(3);
+							String advert = advertise[indice];
+
+							msg += advert;
+							
+						}
+					}
+
+					msg += "\nSesión de lectura en proceso";
+					msg += "\nLeyendo: " + premiumUser.getpCart().get(i).getName();
+					msg += "\nLeyendo página " + premiumUser.getpCart().get(i).getPagRead() + " de " + premiumUser.getpCart().get(i).getPagesNum();
+					break;
+				}
+			}
+		} else {
+			msg = "Error: The user is not a premium user";
+		}
 
     return msg;
 }

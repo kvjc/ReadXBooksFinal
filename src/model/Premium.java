@@ -57,8 +57,8 @@ public class Premium extends User{
                 
                 Calendar publishDate1 = product1.getPublishDate();
                 Calendar publishDate2 = product2.getPublishDate();
-        
-                if (publishDate1 != null && publishDate2 != null && publishDate2.before(publishDate1)) {
+    
+                if (publishDate1 != null && publishDate2 != null && publishDate2.compareTo(publishDate1) < 0) {
                     pCart.set(i, product2);
                     pCart.set(j, product1);
                 }
@@ -72,19 +72,17 @@ public class Premium extends User{
 
         String[][] newMatrix = new String[5][5];
 
-        for(int i = 0; i<newMatrix.length; i++){
-
-            for(int j = 0; j<newMatrix.length; j++){
-
-                if((i*newMatrix.length) + j < pCart.size()){
-
-                    Product temp = pCart.get(i*newMatrix.length+j);
-
+        int index = 0; 
+        for (int i = 0; i < newMatrix.length; i++) {
+            for (int j = 0; j < newMatrix[i].length; j++) {
+                if (index < pCart.size()) {
+                    Product temp = pCart.get(index);
                     newMatrix[i][j] = temp.getId();
+                    index++;
                 }
             }
-        }       
-            
+        }
+
         return newMatrix;
     }
 
